@@ -1,0 +1,28 @@
+=======================================================
+Explication des notebooks
+=======================================================
+Dans ce dossier, j'ai crée :
+- 4 notebooks pour la labellisation des objets via du TEXTE,
+- 5 notebooks pour la labellisation des objets via des IMAGES.
+- 1 notebook pour l'utilisation de l'API. 
+
+Dans chacun de ces notebook, je passe par :
+1. L'étape d'étude de faisabilité (visuellement via le T-SNE en 2D et via les métriques d'évaluations)
+2. La régression supervisée.
+
+Pour la régression supervisée, j'ai explicité la stratégiée et/ou le classifieur utilisée dans le nom 
+(exemple : RAYMOND_Olivier_notebook_TEXT_AVEC_RANDOM_FOREST_052024, indique que le classieur utilisé est Random Forest.)
+
+Dans la partie IMAGE, j'ai testé 2 stratégies qui sont expliquées dans le cour OC: 
+- Stratégie 2 : Extraction des features
+- Stratégie 3 : Fine-tuning partiel  
+
+Plus en détail : 
+	Stratégie #2 : extraction des features
+Cette stratégie consiste à se servir des features du réseau pré-entraîné pour représenter les images du nouveau problème. Pour cela, on retire la dernière couche fully-connected et on fixe tous les autres paramètres. Ce réseau tronqué va ainsi calculer la représentation de chaque image en entrée à partir des features déjà apprises lors du pré-entraînement. On entraîne alors un classifieur, initialisé aléatoirement, sur ces représentations pour résoudre le nouveau problème.
+La stratégie #2 doit être utilisée lorsque la nouvelle collection d'images est petite et similaire aux images de pré-entraînement. En effet, entraîner le réseau sur aussi peu d'images est dangereux puisque le risque d'overfitting est important. De plus, si les nouvelles images ressemblent aux anciennes, elles peuvent alors être représentées par les mêmes features.
+	Stratégie n°3 : Fine-Tuning Partiel : 
+Il s'agit d'un mélange des stratégies #1 et #2 : on remplace à nouveau la dernière couche fully-connected par le nouveau classifieur initialisé aléatoirement, et on fixe les paramètres de certaines couches du réseau pré-entraîné. Ainsi, en plus du classifieur, on entraîne sur les nouvelles images les couches non-fixées, qui correspondent en général aux plus hautes du réseau.
+On utilise cette stratégie lorsque la nouvelle collection d'images est petite mais très différente des images du pré-entraînement. D'une part, comme il y a peu d'images d'entraînement, la stratégie #1 qui consiste à entraîner tout le réseau n'est pas envisageable à cause du risque d'overfitting.
+
+
